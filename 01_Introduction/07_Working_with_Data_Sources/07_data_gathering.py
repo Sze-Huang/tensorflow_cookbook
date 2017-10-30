@@ -24,11 +24,11 @@ print(set(iris.target))
 # Low Birthrate Data
 import requests
 
-birthdata_url = 'https://www.umass.edu/statdata/statdata/data/lowbwt.dat'
+birthdata_url = 'https://github.com/nfmcclure/tensorflow_cookbook/raw/master/01_Introduction/07_Working_with_Data_Sources/birthweight_data/birthweight.dat'
 birth_file = requests.get(birthdata_url)
-birth_data = birth_file.text.split('\r\n')[5:]
-birth_header = [x for x in birth_data[0].split(' ') if len(x)>=1]
-birth_data = [[float(x) for x in y.split(' ') if len(x)>=1] for y in birth_data[1:] if len(y)>=1]
+birth_data = birth_file.text.split('\r\n')
+birth_header = birth_data[0].split('\t')
+birth_data = [[float(x) for x in y.split('\t') if len(x)>=1] for y in birth_data[1:] if len(y)>=1]
 print(len(birth_data))
 print(len(birth_data[0]))
 
@@ -52,6 +52,25 @@ print(len(mnist.train.images))
 print(len(mnist.test.images))
 print(len(mnist.validation.images))
 print(mnist.train.labels[1,:])
+
+# CIFAR-10 Image Category Dataset
+# The CIFAR-10 data ( https://www.cs.toronto.edu/~kriz/cifar.html ) contains 60,000 32x32 color images of 10 classes.
+# It was collected by Alex Krizhevsky, Vinod Nair, and Geoffrey Hinton.
+# Alex Krizhevsky maintains the page referenced here.
+# This is such a common dataset, that there are built in functions in TensorFlow to access this data.
+
+# Running this command requires an internet connection and a few minutes to download all the images.
+(X_train, y_train), (X_test, y_test) = tf.contrib.keras.datasets.cifar10.load_data()
+
+print(X_train.shape)
+print(y_train.shape)
+print(y_train[0,]) # this is a frog
+
+# Plot the 0-th image (a frog)
+from PIL import Image
+%matplotlib inline
+img = Image.fromarray(X_train[0,:,:,:])
+plt.imshow(img)
 
 
 # Ham/Spam Text Data
